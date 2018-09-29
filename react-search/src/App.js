@@ -22,29 +22,29 @@ class App extends Component {
       .then(res =>
         res.map(result =>
           this.setState({
-            countries: [...this.state.countries, result.name],
-            filteredCountries: [...this.state.countries, result.name]
+            countries: [...this.state.countries, result.name]
           })
         )
       );
   }
 
   handleChange(e) {
-    let filterCountries;
-    filterCountries = this.state.countries.filter(country => {
-      return country
-        .toLowerCase()
-        .includes(this.state.searchTerm.toLowerCase());
-    });
-
     this.setState({
-      searchTerm: e.target.value,
-      filteredCountries: filterCountries
+      searchTerm: e.target.value
     });
   }
 
   render() {
-    let allCountries = this.state.filteredCountries.map(a => this.Iterate(a));
+    let searchTerm = this.state.searchTerm.trim().toLowerCase();
+    let filterCountries = this.state.countries;
+
+    if (searchTerm.length > 0) {
+      filterCountries = filterCountries.filter(country => {
+        return country.toLowerCase().match(searchTerm);
+      });
+    }
+
+    let allCountries = filterCountries.map(a => this.Iterate(a));
     return (
       <div className="App">
         <div>
